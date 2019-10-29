@@ -14,16 +14,17 @@ time.sleep(2)
 driver.get("https://www.myscore.com.ua/match/4Mjo1dea/#match-summary")
 # navigate to N2N tab
 time.sleep(1)
+
+
 def navigate_to_n2n():
     elements = driver.find_element_by_id("li-match-head-2-head")
     elements.click()
     time.sleep(1)
 
-# html = driver.find_elements_by_css_selector("div[id=tab-h2h-overall]").get_attribute("innerHTML")
-# soup = BeautifulSoup(html, "html.parser")
-...
 
+def get_team_names():
 
+    ...
 # return list of matches
 # container[0] - home, container[1] - away, container[2] - common
 def get_last_matches(container):
@@ -76,6 +77,7 @@ def last_games_statistics(container_number, list_len):
     print(
         f"Wins(%) - {toFixed(wins_pers, 2)}%, Loss (%) - {toFixed(loss_pers, 2)}%, A Draw (%) - {toFixed(a_draw_pers, 2)}%")
 
+
 # print average goals in the last matches
 def goals_statistics(list_of_matches):
     total_goals = 0
@@ -89,6 +91,7 @@ def goals_statistics(list_of_matches):
     print(f"Average goals in the match --> {toFixed(average_goals, 1)}")
 
 
+# get the result for each url in the list
 def get_result(url_list):
     for url in url_list:
         driver.get(url)
@@ -106,9 +109,12 @@ def get_result(url_list):
         last_games_statistics(container_number=1, list_len=list_len)
         goals_statistics(list_of_matches=last_matches)
 
-url_list = ['https://www.myscore.com.ua/match/4Mjo1dea/#match-summary', 'https://www.myscore.com.ua/match/AJggazQB/#match-summary']
-get_result(url_list=url_list)
-
+test_url = 'https://www.myscore.com.ua/match/4Mjo1dea/#match-summary'
+url_list = ['https://www.myscore.com.ua/match/4Mjo1dea/#match-summary',
+            'https://www.myscore.com.ua/match/AJggazQB/#match-summary',
+            'https://www.myscore.com.ua/match/GWG1au3E/#match-summary',
+            'https://www.myscore.com.ua/match/YBsbuKBr/#match-summary']
+get_result(url_list=test_url)
 
 time.sleep(5)
 driver.close()
