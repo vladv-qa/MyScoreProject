@@ -14,9 +14,10 @@ time.sleep(2)
 driver.get("https://www.myscore.com.ua/match/4Mjo1dea/#match-summary")
 # navigate to N2N tab
 time.sleep(1)
-elements = driver.find_element_by_id("li-match-head-2-head")
-elements.click()
-time.sleep(1)
+def navigate_to_n2n():
+    elements = driver.find_element_by_id("li-match-head-2-head")
+    elements.click()
+    time.sleep(1)
 
 # html = driver.find_elements_by_css_selector("div[id=tab-h2h-overall]").get_attribute("innerHTML")
 # soup = BeautifulSoup(html, "html.parser")
@@ -88,8 +89,10 @@ def goals_statistics(list_of_matches):
     print(f"Average goals in the match --> {toFixed(average_goals, 1)}")
 
 
-def print_result(url_list):
+def get_result(url_list):
     for url in url_list:
+        driver.get(url)
+        navigate_to_n2n()
         # home
         last_matches = get_last_matches(container=0)
         list_len = get_match_list_len(last_matches=last_matches)
@@ -97,11 +100,15 @@ def print_result(url_list):
         last_games_statistics(container_number=0, list_len=list_len)
         goals_statistics(list_of_matches=last_matches)
         # away
-        last_matches = get_last_matches(container=0)
+        last_matches = get_last_matches(container=1)
         list_len = get_match_list_len(last_matches=last_matches)
         print("Away player statistic:")
-        last_games_statistics(container_number=0, list_len=list_len)
+        last_games_statistics(container_number=1, list_len=list_len)
         goals_statistics(list_of_matches=last_matches)
+
+url_list = ['https://www.myscore.com.ua/match/4Mjo1dea/#match-summary', 'https://www.myscore.com.ua/match/AJggazQB/#match-summary']
+get_result(url_list=url_list)
+
 
 time.sleep(5)
 driver.close()
