@@ -32,7 +32,7 @@ pytest==5.1.2
 pytest-html==2.0.0
 pytest-metadata==1.8.0
 python-telegram-bot==12.1.1
-requests==2.7.0
+requests==2.20.0
 selenium==3.141.0
 Selenium-Screenshot==1.5.0
 six==1.12.0
