@@ -3,7 +3,7 @@ from selenium import webdriver
 from bs4 import BeautifulSoup  # pip install bs4
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
-import openpyxl as xl
+
 
 
 options = Options()
@@ -13,11 +13,7 @@ driver.implicitly_wait(10)
 driver.set_window_size(1920, 1080)
 time.sleep(2)
 
-driver.get("https://www.myscore.com.ua/match/4Mjo1dea/#match-summary")
 # navigate to N2N tab
-time.sleep(1)
-
-
 def navigate_to_n2n():
     elements = driver.find_element_by_id("li-match-head-2-head")
     elements.click()
@@ -100,6 +96,7 @@ def goals_statistics(list_of_matches):
 def get_result(url_list):
     for url in url_list:
         driver.get(url)
+        time.sleep(1)
         navigate_to_n2n()
         get_team_names()
         # home
@@ -127,6 +124,8 @@ def expand_events(w_driver):
 
 def get_url_list():
     driver.get('https://www.myscore.com.ua')
+    driver.find_element_by_class_name('tabs__text.tabs__text--default').click()
+    time.sleep(1)
     expand_events(w_driver=driver)
     url_list = []
     elements = driver.find_elements_by_class_name('event__match.event__match--scheduled.event__match--oneLine')
