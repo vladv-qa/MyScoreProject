@@ -3,6 +3,8 @@ from selenium import webdriver
 from bs4 import BeautifulSoup  # pip install bs4
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
+import openpyxl as xl
+
 
 options = Options()
 options.headless = False
@@ -23,8 +25,12 @@ def navigate_to_n2n():
 
 
 def get_team_names():
-
+    home_name = driver.find_element_by_class_name('team-text.tname-home').text
+    away_name = driver.find_element_by_class_name('team-text.tname-away').text
+    print(f"{home_name} ---- {away_name}")
     ...
+
+
 # return list of matches
 # container[0] - home, container[1] - away, container[2] - common
 def get_last_matches(container):
@@ -86,7 +92,6 @@ def goals_statistics(list_of_matches):
         goals = item.find_element_by_class_name("score").find_element_by_tag_name("strong").get_attribute("innerHTML")
         goals_in_match = sum(list(map(lambda x: int(x.strip()), goals.split(":"))))
         total_goals = total_goals + goals_in_match
-    print(total_goals)
     average_goals = (total_goals / list_len)
     print(f"Average goals in the match --> {toFixed(average_goals, 1)}")
 
@@ -96,6 +101,7 @@ def get_result(url_list):
     for url in url_list:
         driver.get(url)
         navigate_to_n2n()
+        get_team_names()
         # home
         last_matches = get_last_matches(container=0)
         list_len = get_match_list_len(last_matches=last_matches)
@@ -109,12 +115,33 @@ def get_result(url_list):
         last_games_statistics(container_number=1, list_len=list_len)
         goals_statistics(list_of_matches=last_matches)
 
-test_url = 'https://www.myscore.com.ua/match/4Mjo1dea/#match-summary'
-url_list = ['https://www.myscore.com.ua/match/4Mjo1dea/#match-summary',
-            'https://www.myscore.com.ua/match/AJggazQB/#match-summary',
-            'https://www.myscore.com.ua/match/GWG1au3E/#match-summary',
-            'https://www.myscore.com.ua/match/YBsbuKBr/#match-summary']
-get_result(url_list=test_url)
+
+def expand_events(w_driver):
+    driver = w_driver
+    events = driver.find_elements_by_class_name("event__info")
+    for event in events:
+        title = event.get_attribute("innerHTML")
+        if 'показать игры' in title:
+         event.click()
+
+
+def get_url_list():
+    driver.get('https://www.myscore.com.ua')
+    expand_events(w_driver=driver)
+    url_list = []
+    elements = driver.find_elements_by_class_name('event__match.event__match--scheduled.event__match--oneLine')
+    for element in elements:
+        match_id = element.get_attribute('id').split("_")[-1]
+        url = "https://www.myscore.ru/match/{}/#match-summary".format(match_id)
+        url_list.append(url)
+    return url_list
+
+
+url_list = get_url_list()
+
+# for item in url_list:
+#     print(item)
+get_result(url_list=url_list)
 
 time.sleep(5)
 driver.close()
