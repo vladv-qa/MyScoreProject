@@ -16,7 +16,7 @@ idna==2.8
 importlib-metadata==0.23
 jdcal==1.4.1
 Jinja2==2.10.3
-lxml==4.4.1
+lxml==4.6.5
 MarkupSafe==1.1.1
 more-itertools==7.2.0
 namedlist==1.7
